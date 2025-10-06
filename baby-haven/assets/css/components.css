@@ -1,0 +1,13 @@
+/* 
+# Header Block
+File: assets/css/components.css
+Purpose: مكوّنات الواجهة (أزرار، حقول، مودال، توست)
+*/
+.input{width:100%;padding:.6rem .8rem;border-radius:.6rem;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)}
+.modal.open{display:flex}
+.modal .box{background:var(--card);border-radius:16px;padding:20px;min-width:320px;max-width:90vw}
+.toast{position:fixed;inset-inline:0;bottom:16px;display:flex;justify-content:center}
+.toast .msg{background:#1f2937;color:#fff;padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+label{display:block;margin:.6rem 0 .2rem}
+select{padding:.55rem .8rem;border-radius:.6rem;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit}
