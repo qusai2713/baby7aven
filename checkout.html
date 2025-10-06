@@ -1,0 +1,51 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Baby Haven – إتمام الطلب</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand"><div class="logo"></div><div>Baby Haven</div></div>
+      <nav class="nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="margin:16px 0 28px;display:grid;gap:12px">
+    <h2 style="margin:0">إتمام الطلب</h2>
+    <div class="card" style="padding:14px;display:grid;gap:8px">
+      <div class="field"><label>الاسم</label><input id="cName" type="text"></div>
+      <div class="field"><label>الهاتف</label><input id="cPhone" type="text"></div>
+      <div class="field"><label>العنوان</label><input id="cAddr" type="text"></div>
+      <div class="field"><label>ملاحظات (اختياري)</label><textarea id="cNote"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn" onclick="startPayment()">الدفع عبر ثواني</button>
+        <a class="btn ghost" href="cart.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center">الرجوع للسلة</a>
+      </div>
+    </div>
+    <div id="ckInfo" class="muted">سيتم استخدام المفاتيح من <strong>لوحة التحكم &gt; الإعدادات</strong>.</div>
+  </main>
+
+  <script src="assets/js/store-db.js"></script>
+  <script src="assets/js/settings.js"></script>
+  <script>
+    function startPayment(){
+      const s = BHSettings.load();
+      if(!s.thawani_public_key || !s.thawani_secret_key){
+        alert('الرجاء ضبط مفاتيح ثواني من لوحة التحكم > الإعدادات.');
+        return;
+      }
+      alert('تهيئة Session ثواني (نموذج). ضع هنا استدعاء API السيرفر لديك ثم أعد التوجيه لبوابة الدفع.');
+      location.href = 'success.html';
+    }
+  </script>
+</body>
+</html>

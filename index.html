@@ -1,0 +1,57 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baby Haven — الرئيسية</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand"><div class="logo"></div><div>Baby Haven</div></div>
+      <nav class="nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section style="margin-top:22px">
+      <div class="card" style="padding:18px;text-align:center">
+        <h2 style="margin:6px 0 8px">مرحبًا بك</h2>
+        <p class="muted" style="margin:0 0 12px">آخر الإضافات بواجهة Soft Dream.</p>
+      </div>
+    </section>
+
+    <section style="margin:26px 0">
+      <div style="display:flex;justify-content:center;align-items:center;margin-bottom:10px">
+        <h3 style="margin:0;text-align:center">أحدث المنتجات</h3>
+      </div>
+      <div id="gridHome" class="grid"></div>
+      <div id="emptyHome" class="empty" style="display:none">لا توجد منتجات بعد — أضف منتجات من لوحة التحكم.</div>
+    </section>
+  </main>
+
+  <script src="assets/js/store-db.js"></script>
+  <script src="assets/js/store-cards.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      BHCards.renderHome('gridHome', 6); // أحدث 6 منتجات فقط
+      const has = document.getElementById('gridHome').children.length > 0;
+      document.getElementById('emptyHome').style.display = has ? 'none' : 'block';
+    });
+  </script>
+
+<div id="catalog-grid" class="grid"></div>
+
+<!-- BH Catalog Layer -->
+<script src="assets/js/common/bh-data.js"></script>
+<script src="assets/js/storefront/catalog.js"></script>
+<script>window.BH_Catalog && BH_Catalog.render('#catalog-grid');</script>
+
+</body>
+</html>

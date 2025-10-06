@@ -1,0 +1,97 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Baby Haven – جميع المنتجات</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand"><div class="logo"></div><div>Baby Haven</div></div>
+      <nav class="nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section style="margin:16px 0">
+      <div class="card" style="padding:12px">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <input id="q" type="search" placeholder="ابحث باسم المنتج أو SKU…" style="flex:1 1 320px">
+          <select id="fltType"><option value="all">كل الأنواع</option><option value="simple">عادي</option><option value="multi-color">ألوان</option><option value="multi-size">أحجام</option></select>
+          <select id="fltSection"><option value="">كل الأقسام</option></select>
+          <select id="fltCategory"><option value="">كل الفئات</option></select>
+          <select id="sortBy"><option value="date-desc">الأحدث</option><option value="price-asc">السعر ↑</option><option value="price-desc">السعر ↓</option><option value="qty-desc">الكمية ↓</option></select>
+          <button id="reset" class="btn ghost" style="display:flex;justify-content:center;align-items:center;">إعادة تعيين</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin:10px 0 26px">
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" style="display:none">لا نتائج مطابقة.</div>
+    </section>
+  </main>
+
+  <script src="assets/js/store-db.js"></script>
+  <script src="assets/js/store-cards.js"></script>
+  <script>
+    const { KEY_PRODUCTS, read } = window.StoreDB;
+    const State = { q:'', type:'all', section:'', category:'', sort:'date-desc' };
+
+    function uniq(arr){ return Array.from(new Set(arr)); }
+    function populateFilters(data){
+      const secSel = document.getElementById('fltSection');
+      const catSel = document.getElementById('fltCategory');
+      const secs = uniq(data.map(p=>p.section).filter(Boolean));
+      secSel.innerHTML = '<option value="">كل الأقسام</option>' + secs.map(s=>`<option>${s}</option>`).join('');
+      function refreshCats(){
+        const val = secSel.value;
+        const cats = uniq(data.filter(p=>!val || p.section===val).map(p=>p.category).filter(Boolean));
+        catSel.innerHTML = '<option value="">كل الفئات</option>' + cats.map(c=>`<option>${c}</option>`).join('');
+      }
+      secSel.onchange = ()=>{ State.section=secSel.value; refreshCats(); render(); };
+      catSel.onchange = ()=>{ State.category=catSel.value; render(); };
+      refreshCats();
+    }
+
+    function render(){
+      const n = BHCards.renderCatalog('grid', State);
+      document.getElementById('empty').style.display = n ? 'none' : 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const data = read(KEY_PRODUCTS, []);
+      populateFilters(Array.isArray(data)?data:[]);
+      document.getElementById('q').addEventListener('input', e => { State.q = e.target.value.trim(); render(); });
+      document.getElementById('fltType').addEventListener('change', e => { State.type = e.target.value; render(); });
+      document.getElementById('sortBy').addEventListener('change', e => { State.sort = e.target.value; render(); });
+      document.getElementById('reset').addEventListener('click', () => {
+        State.q=''; State.type='all'; State.section=''; State.category=''; State.sort='date-desc';
+        document.getElementById('q').value='';
+        document.getElementById('fltType').value='all';
+        document.getElementById('fltSection').value='';
+        document.getElementById('fltSection').dispatchEvent(new Event('change'));
+        document.getElementById('fltCategory').value='';
+        document.getElementById('sortBy').value='date-desc';
+        render();
+      });
+      render();
+    });
+  </script>
+
+<div id="catalog-grid" class="grid"></div>
+
+<!-- BH Catalog Layer -->
+<script src="assets/js/common/bh-data.js"></script>
+<script src="assets/js/storefront/catalog.js"></script>
+<script>window.BH_Catalog && BH_Catalog.render('#catalog-grid');</script>
+
+</body>
+</html>

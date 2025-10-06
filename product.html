@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Baby Haven – تفاصيل المنتج</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand"><div class="logo"></div><div>Baby Haven</div></div>
+      <nav class="nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="margin:16px 0 28px">
+    <div id="pdWrap"></div>
+  </main>
+
+  <script src="assets/js/store-db.js"></script>
+  <script>
+    // صفحة تفاصيل تعرض منتجًا حسب ?sku=...
+    const { KEY_PRODUCTS, read, fmt, cover } = window.StoreDB;
+    function q(key){ const u=new URL(location.href); return u.searchParams.get(key); }
+    function minVariantPrice(p){
+      if(p.type==='multi-color'){ const arr=(p.colors||[]).map(c=>+c.price||0).filter(Boolean); return arr.length?Math.min(...arr):0; }
+      if(p.type==='multi-size'){ const arr=(p.sizes||[]).map(s=>+s.price||0).filter(Boolean); return arr.length?Math.min(...arr):0; }
+      return +p.price||0;
+    }
+    function render(){
+      const sku = q('sku');
+      const data = read(KEY_PRODUCTS, []);
+      const p = (Array.isArray(data)?data:[]).find(x => String(x.sku||'').toLowerCase()===String(sku||'').toLowerCase());
+      const host = document.getElementById('pdWrap');
+      if(!p){ host.innerHTML='<div class="empty">المنتج غير موجود</div>'; return; }
+      const img = cover(p);
+      const priceBase = p.type==='simple' ? fmt(p.price) : (minVariantPrice(p)?('ابتداءً من '+fmt(minVariantPrice(p))):'متغيّر');
+      const dp = Number(p.discountPercent||0);
+      host.innerHTML = `
+        <div class="card" style="padding:16px;display:grid;grid-template-columns:1fr;gap:16px">
+          <div class="media" style="max-width:420px;margin-inline:auto">
+            ${img?`<img src="${img}" alt="">`:''}
+            ${dp>0?`<span class="badge off">-${dp.toFixed(0)}%</span>`:''}
+          </div>
+          <div style="display:grid;gap:8px">
+            <h2 style="margin:0">${p.name||sku}</h2>
+            <div class="pill" style="width:max-content">SKU: ${p.sku}</div>
+            <div class="price">${priceBase}</div>
+            ${p.type==='multi-color' ? `<div style="display:flex;gap:6px;flex-wrap:wrap"><strong>الألوان:</strong> ${(p.colors||[]).map(c=>`<span class="pill">${c.label}</span>`).join('')}</div>` : ''}
+            ${p.type==='multi-size' ? `<div style="display:flex;gap:6px;flex-wrap:wrap"><strong>المقاسات:</strong> ${(p.sizes||[]).map(s=>`<span class="pill">${s.size}</span>`).join('')}</div>` : ''}
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+              <a class="btn" href="cart.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center">اذهب للسلة</a>
+              <a class="btn ghost" href="products.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center">عودة للمنتجات</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>

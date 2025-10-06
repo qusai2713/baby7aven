@@ -1,0 +1,37 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Baby Haven – السلة</title>
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand"><div class="logo"></div><div>Baby Haven</div></div>
+      <nav class="nav">
+        <a href="index.html">الرئيسية</a>
+        <a href="products.html">المنتجات</a>
+        <a href="cart.html">السلة</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="margin:16px 0 28px;display:grid;grid-template-columns:1fr;gap:16px">
+    <h2 style="margin:0 0 6px">سلة التسوق</h2>
+
+    <div id="cartEmpty" class="empty" style="display:none">
+      السلة فارغة حاليًا. <a href="products.html">ابدأ التسوق</a> ✨
+    </div>
+
+    <div id="cartList" style="display:grid;gap:10px"></div>
+
+    <div id="cartSummary"></div>
+  </main>
+
+  <script src="assets/js/store-db.js"></script>
+  <script src="assets/js/cart.js"></script>
+</body>
+</html>
